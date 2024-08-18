@@ -1,0 +1,26 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - uses: gradle/gradle-build-action@v2
+      id: gradle_app
+      with:
+        gradle-version: 7.6.2
+        arguments: assembleRelease
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Signed app bundle
+        path: app/build/outputs/apk/release/*.apk
